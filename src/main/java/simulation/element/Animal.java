@@ -1,24 +1,28 @@
 package simulation.element;
 
+import javafx.geometry.Pos;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 import simulation.IAnimalObserver;
 import simulation.MapDirection;
 import simulation.Vector2d;
 import simulation.map.IMap;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.util.*;
 
 public class Animal extends AbstractMapElement{
     private final Random random = new Random();
     private MapDirection direction = MapDirection.getRandom();
-    private final Genotype genotype;
+    private Genotype genotype;
     private int age = 0;
+    private int deathDate;
     private IMap map;
     private final List<IAnimalObserver> observers = new ArrayList<>();
     private Animal[] parents;
-    private Set<Animal> children;
+    private final Set<Animal> children = new HashSet<>();
 
     public Animal(IMap map, int energy) {
         this.map = map;
@@ -54,6 +58,10 @@ public class Animal extends AbstractMapElement{
         return this.genotype.getGenotype();
     }
 
+    public void setGenotype(int[] genotype){
+        this.genotype = new Genotype(genotype);
+    }
+
     public void increaseEnergy(int energy) {
         this.energy += energy;
         this.cell.removeElement(this);
@@ -68,11 +76,12 @@ public class Animal extends AbstractMapElement{
         this.energy -= this.getEnergy() / 4;
     }
 
-    public void die() {
+    public void die(int epoque) {
         System.out.print(this);
         System.out.println(" dead");
         this.cell.removeElement(this);
         this.map.removeElement(this);
+        this.deathDate = epoque;
     }
 
     public void move() {
@@ -133,5 +142,17 @@ public class Animal extends AbstractMapElement{
     @Override
     public String toString() {
         return "A " + this.position.toString() + " " + this.energy + " " + this.cell.getPosition().toString();
+    }
+
+    public int getAge() {
+        return this.age;
+    }
+
+    public void addChild(Animal child) {
+        this.children.add(child);
+    }
+
+    public int getChildrenAmount() {
+        return this.children.size();
     }
 }

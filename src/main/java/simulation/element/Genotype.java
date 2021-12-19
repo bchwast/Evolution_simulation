@@ -5,13 +5,17 @@ import java.util.Random;
 import java.util.stream.IntStream;
 
 public class Genotype {
-    private final int[] genotype = new int[32];
+    private int[] genotype = new int[32];
     private final Random random = new Random();
 
     public Genotype() {
         IntStream.range(0, this.genotype.length).forEach(i -> this.genotype[i] = this.random.nextInt(0, 8));
 
         Arrays.sort(this.genotype);
+    }
+
+    public Genotype(int[] genotype) {
+        this.genotype = genotype;
     }
 
     public Genotype(Animal firstParent, Animal secondParent) {

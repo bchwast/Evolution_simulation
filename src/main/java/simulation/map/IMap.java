@@ -29,4 +29,8 @@ public interface IMap extends IAnimalObserver {
     boolean canPlace(Vector2d position);
 
     boolean isJungle(Vector2d position);
+
+    void decreasePlants();
+
+    int getPlantsAmm();
 }

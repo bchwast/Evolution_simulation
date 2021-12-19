@@ -87,6 +87,7 @@ public class Cell {
             for (Animal animal : animals) {
                 animal.increaseEnergy(((Plant) food).getPlantEnergy() / animals.size());
             }
+            this.map.decreasePlants();
         }
     }
 
@@ -94,7 +95,9 @@ public class Cell {
         Animal child = new Animal(this.map, parents[0], parents[1]);
 //        this.map.place(child);
         parents[0].breedEnergyDecrease();
+        parents[0].addChild(child);
         parents[1].breedEnergyDecrease();
+        parents[1].addChild(child);
         return child;
     }
 

@@ -17,6 +17,7 @@ public abstract class AbstractMap implements IMap{
     protected LinkedHashMap<Vector2d, Cell> cells = new LinkedHashMap<>();
     protected List<Vector2d> plantablePositions = new ArrayList<>();
     protected List<Vector2d> plantableJunglePositions = new ArrayList<>();
+    private int plantsAmm = 0;
 
     public AbstractMap(int width, int height, double jungleRatio) {
         this.width = width;
@@ -120,12 +121,14 @@ public abstract class AbstractMap implements IMap{
             Plant firstPlant = new Plant(junglePosition, plantEnergy);
             place(firstPlant);
             cells.add(firstPlant.getCell());
+            this.plantsAmm++;
         }
         if (this.plantablePositions.size() > 0) {
             Vector2d position = this.plantablePositions.get(random.nextInt(this.plantablePositions.size()));
             Plant secondPlant = new Plant(position, plantEnergy);
             place(secondPlant);
             cells.add(secondPlant.getCell());
+            this.plantsAmm++;
         }
         return cells;
     }
@@ -138,5 +141,15 @@ public abstract class AbstractMap implements IMap{
     @Override
     public boolean isJungle(Vector2d position) {
         return position.follows(getJungleLowerLeft()) && position.precedes(getJungleUpperRight());
+    }
+
+    @Override
+    public void decreasePlants() {
+        this.plantsAmm--;
+    }
+
+    @Override
+    public int getPlantsAmm() {
+        return this.plantsAmm;
     }
 }
