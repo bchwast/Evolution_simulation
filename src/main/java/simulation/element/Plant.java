@@ -1,13 +1,6 @@
 package simulation.element;
 
-import javafx.geometry.Pos;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
 import simulation.Vector2d;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 public class Plant extends AbstractMapElement{
     private final int plantEnergy;

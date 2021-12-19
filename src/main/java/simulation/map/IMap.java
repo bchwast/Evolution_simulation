@@ -2,7 +2,6 @@ package simulation.map;
 
 import simulation.IAnimalObserver;
 import simulation.Vector2d;
-import simulation.element.Animal;
 import simulation.element.IMapElement;
 
 import java.util.List;

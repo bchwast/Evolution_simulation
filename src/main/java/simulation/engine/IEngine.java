@@ -13,7 +13,7 @@ public interface IEngine extends Runnable{
 
     void resume();
 
-    String getGenotype();
+    int[] getGenotype();
 
     int getAnimalsAmount();
 

@@ -1,10 +1,6 @@
 package simulation.gui;
 
-import javafx.geometry.HPos;
 import javafx.geometry.Pos;
-import javafx.scene.control.ListView;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -13,8 +9,6 @@ import simulation.element.IMapElement;
 import simulation.element.Plant;
 import simulation.map.Cell;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -22,23 +16,23 @@ import java.util.stream.IntStream;
 public class GuiElementBox {
     private final int startEnergy;
     private final int size;
-    private List<Circle> animal;
+    private final List<Circle> animal;
 
     public GuiElementBox(int size, int startEnergy) {
         this.size = size;
         this.startEnergy = startEnergy;
         this.animal = new ArrayList<>();
         IntStream.range(0, 10).forEach(i -> this.animal.add(new Circle(size / 2, size / 2, (size - 2) / 2)));
-        animal.get(0).setFill(Color.rgb(182,0,0));
-        animal.get(1).setFill(Color.rgb(255,0,0));
-        animal.get(2).setFill(Color.rgb(254,109,1));
-        animal.get(3).setFill(Color.rgb(249,157,6));
-        animal.get(4).setFill(Color.rgb(255,221,0));
-        animal.get(5).setFill(Color.rgb(252,253,2));
-        animal.get(6).setFill(Color.rgb(149,255,0));
-        animal.get(7).setFill(Color.rgb(0,255,64));
-        animal.get(8).setFill(Color.rgb(0,230,58));
-        animal.get(9).setFill(Color.rgb(0,202,51));
+        this.animal.get(0).setFill(Color.rgb(182,0,0));
+        this.animal.get(1).setFill(Color.rgb(255,0,0));
+        this.animal.get(2).setFill(Color.rgb(254,109,1));
+        this.animal.get(3).setFill(Color.rgb(249,157,6));
+        this.animal.get(4).setFill(Color.rgb(255,221,0));
+        this.animal.get(5).setFill(Color.rgb(252,253,2));
+        this.animal.get(6).setFill(Color.rgb(149,255,0));
+        this.animal.get(7).setFill(Color.rgb(0,255,64));
+        this.animal.get(8).setFill(Color.rgb(0,230,58));
+        this.animal.get(9).setFill(Color.rgb(0,202,51));
     }
 
 

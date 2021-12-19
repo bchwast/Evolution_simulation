@@ -93,8 +93,6 @@ public abstract class AbstractMap implements IMap{
     @Override
     public void positionChanged(Animal animal, Vector2d oldPosition, Vector2d newPosition) {
         Cell oldCell = this.cells.get(oldPosition);
-//        System.out.println(oldPosition);
-//        System.out.println(oldCell);
         oldCell.removeElement(animal);
         tryClearCell(oldCell);
         insertInCell(animal);

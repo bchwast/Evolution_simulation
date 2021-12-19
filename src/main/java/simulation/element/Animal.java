@@ -1,16 +1,10 @@
 package simulation.element;
 
-import javafx.geometry.Pos;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
 import simulation.IAnimalObserver;
 import simulation.MapDirection;
 import simulation.Vector2d;
 import simulation.map.IMap;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.*;
 
 public class Animal extends AbstractMapElement{
@@ -18,8 +12,8 @@ public class Animal extends AbstractMapElement{
     private MapDirection direction = MapDirection.getRandom();
     private Genotype genotype;
     private int age = 0;
-    private int deathDate;
-    private IMap map;
+    private int deathDate = -1;
+    private final IMap map;
     private final List<IAnimalObserver> observers = new ArrayList<>();
     private Animal[] parents;
     private final Set<Animal> children = new HashSet<>();
@@ -87,20 +81,12 @@ public class Animal extends AbstractMapElement{
     public void move() {
         this.age += 1;
         int gene = this.genotype.getGene();
-//        System.out.print(this.position);
-//        System.out.print(this.direction);
-//        System.out.println(gene);
         switch (gene) {
             case 0 -> {
                 Vector2d newPosition = this.position.add(this.direction.toUnitVector());
                 if (this.map.canMoveTo(newPosition)) {
                     Vector2d oldPosition = this.position;
                     this.position = this.map.correctPosition(newPosition);
-                    System.out.print(this.cell);
-                    System.out.print(" moved from ");
-                    System.out.print(oldPosition);
-                    System.out.print(" to ");
-                    System.out.println(this.position);
                     changePosition(oldPosition, this.position);
                 }
             }
@@ -112,11 +98,6 @@ public class Animal extends AbstractMapElement{
                 if (this.map.canMoveTo(newPosition)) {
                     Vector2d oldPosition = this.position;
                     this.position = this.map.correctPosition(newPosition);
-                    System.out.print(this.cell);
-                    System.out.print(" moved from ");
-                    System.out.print(oldPosition);
-                    System.out.print(" to ");
-                    System.out.println(this.position);
                     changePosition(oldPosition, this.position);
                 }
             }
@@ -125,11 +106,6 @@ public class Animal extends AbstractMapElement{
             case 7 -> this.direction = this.direction.previous();
             default -> {
             }
-        }
-        if (gene == 0 || gene == 4) {
-//            System.out.print(" moved ");
-//            System.out.print(this.position);
-//            System.out.println(this.direction);
         }
     }
 
@@ -154,5 +130,27 @@ public class Animal extends AbstractMapElement{
 
     public int getChildrenAmount() {
         return this.children.size();
+    }
+
+    public int getDeathDate() {
+        return this.deathDate;
+    }
+
+    public int getDescendantsAmount() {
+        int descendants = 0;
+        if (getChildrenAmount() == 0) {
+            return descendants;
+        }
+        else {
+            for (Animal child : this.children) {
+                descendants += child.getDescendantsAmount();
+                descendants++;
+            }
+            return descendants;
+        }
+    }
+
+    public IMap getMap() {
+        return this.map;
     }
 }

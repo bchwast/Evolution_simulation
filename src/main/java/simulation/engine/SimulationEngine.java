@@ -10,22 +10,21 @@ import simulation.map.Cell;
 import simulation.map.IMap;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 public class SimulationEngine implements IEngine{
-    private IMap map;
+    private final IMap map;
     private final List<Animal> animals = new ArrayList<>();
     private final LinkedHashMap<Vector2d, Cell> cells = new LinkedHashMap<>();
     private final List<IMapUpdateObserver> observers = new ArrayList<>();
     private final List<Animal> dead = new ArrayList<>();
-    private int startEnergy;
-    private int moveEnergy;
-    private int plantEnergy;
+    private final int startEnergy;
+    private final int moveEnergy;
+    private final int plantEnergy;
     private boolean paused = false;
     private int epoque = 0;
-    private boolean magic;
+    private final boolean magic;
     private int magicLeft = 3;
 
     public SimulationEngine(IMap map, int animalsAmount, int startEnergy, int moveEnergy, int plantEnergy, boolean magic) {
@@ -115,7 +114,7 @@ public class SimulationEngine implements IEngine{
             }
 
             try {
-                Thread.sleep(100);
+                Thread.sleep(200);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -127,15 +126,6 @@ public class SimulationEngine implements IEngine{
                     e.printStackTrace();
                 }
             }
-
-
-//            if (this.paused) {
-//                try {
-//                    Thread.sleep(999999999);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
         }
     };
 
@@ -179,8 +169,8 @@ public class SimulationEngine implements IEngine{
     }
 
     @Override
-    public String getGenotype() {
-        return Arrays.toString(Mode.mode(this.animals));
+    public int[] getGenotype() {
+        return Mode.mode(this.animals);
     }
 
     @Override

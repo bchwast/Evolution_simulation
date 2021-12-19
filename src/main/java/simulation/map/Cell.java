@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Cell {
-    private IMap map;
+    private final IMap map;
     private final List<IMapElement> elements = new ArrayList<>();
     private final Vector2d position;
     private boolean jungle = false;
@@ -39,12 +39,7 @@ public class Cell {
     }
 
     public void removeElement(IMapElement element) {
-        if (! this.elements.remove(element)) {
-//            this.elements.remove(element);
-            System.out.print(false);
-            System.out.println(element);
-        };
-        System.out.println(true);
+        this.elements.remove(element);
     }
 
     public List<Animal> getHighestEnergyAnimals(){
@@ -62,7 +57,6 @@ public class Cell {
 
     public Animal[] getParents() {
         Animal firstParent = (Animal) this.getFirstElement();
-//        this.elements.pollFirst();
         removeElement(firstParent);
         Animal secondParent = (Animal) this.getFirstElement();
         addElement(firstParent);
@@ -77,11 +71,7 @@ public class Cell {
     public void eat() {
         IMapElement food = getFirstElement();
         if (food instanceof Plant) {
-//            System.out.println(food);
-//            System.out.println(this.elements);
             this.elements.remove(0);
-//            System.out.println(getFirstElement());
-//            System.out.println(this.elements);
             List<Animal> animals = getHighestEnergyAnimals();
 
             for (Animal animal : animals) {
@@ -93,7 +83,6 @@ public class Cell {
 
     private Animal breed(Animal[] parents) {
         Animal child = new Animal(this.map, parents[0], parents[1]);
-//        this.map.place(child);
         parents[0].breedEnergyDecrease();
         parents[0].addChild(child);
         parents[1].breedEnergyDecrease();
