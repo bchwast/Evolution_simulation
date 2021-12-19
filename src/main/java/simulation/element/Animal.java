@@ -20,28 +20,33 @@ public class Animal extends AbstractMapElement{
     private Animal[] parents;
     private Set<Animal> children;
 
-    public Animal(IMap map, Energy energy) {
+    public Animal(IMap map, int energy) {
         this.map = map;
         addObserver(map);
         this.energy = energy;
         this.genotype = new Genotype();
-        this.position = new Vector2d(this.random.nextInt(0, this.map.getLowerLeft().x + 1),
-                this.random.nextInt(0, this.map.getUpperRight().y + 1));
+        Vector2d position =  new Vector2d(this.random.nextInt(this.map.getUpperRight().x + 1),
+                this.random.nextInt(this.map.getUpperRight().y + 1));
+        while (! this.map.canPlace(position)) {
+            position =  new Vector2d(this.random.nextInt(this.map.getUpperRight().x + 1),
+                    this.random.nextInt(this.map.getUpperRight().y + 1));
+        }
+        this.position = position;
     }
 
     public Animal(IMap map, Animal firstParent, Animal secondParent) {
         this.map = map;
         addObserver(map);
-        this.energy = new Energy((firstParent.getEnergyValue() / 4) + (secondParent.getEnergyValue() / 4));
+        this.energy = (firstParent.getEnergy() / 4) + (secondParent.getEnergy() / 4);
         this.genotype = new Genotype(firstParent, secondParent);
         this.position = firstParent.getPosition();
     }
 
-    private void addObserver(IAnimalObserver observer) {
+    public void addObserver(IAnimalObserver observer) {
         this.observers.add(observer);
     }
 
-    private void removeObserver(IAnimalObserver observer) {
+    public void removeObserver(IAnimalObserver observer) {
         this.observers.remove(observer);
     }
 
@@ -49,35 +54,73 @@ public class Animal extends AbstractMapElement{
         return this.genotype.getGenotype();
     }
 
-    public void increaseEnergy(Energy energy) {
-        this.energy.add(energy);
+    public void increaseEnergy(int energy) {
+        this.energy += energy;
         this.cell.removeElement(this);
         this.cell.addElement(this);
     }
 
-    public void decreaseEnergy(Energy energy) {
-        this.energy.subtract(energy);
+    public void decreaseEnergy(int energy) {
+        this.energy -= energy;
     }
 
     public void breedEnergyDecrease() {
-        this.energy.subtract(new Energy(this.getEnergyValue() / 4));
+        this.energy -= this.getEnergy() / 4;
     }
 
-    public boolean die() {
+    public void die() {
+        System.out.print(this);
+        System.out.println(" dead");
         this.cell.removeElement(this);
-        this.map.remove(this);
+        this.map.removeElement(this);
     }
 
     public void move() {
-        switch (this.genotype.getGene()) {
+        this.age += 1;
+        int gene = this.genotype.getGene();
+//        System.out.print(this.position);
+//        System.out.print(this.direction);
+//        System.out.println(gene);
+        switch (gene) {
             case 0 -> {
                 Vector2d newPosition = this.position.add(this.direction.toUnitVector());
                 if (this.map.canMoveTo(newPosition)) {
                     Vector2d oldPosition = this.position;
                     this.position = this.map.correctPosition(newPosition);
+                    System.out.print(this.cell);
+                    System.out.print(" moved from ");
+                    System.out.print(oldPosition);
+                    System.out.print(" to ");
+                    System.out.println(this.position);
                     changePosition(oldPosition, this.position);
                 }
             }
+            case 1 -> this.direction =  this.direction.next();
+            case 2 -> this.direction = this.direction.next().next();
+            case 3 -> this.direction = this.direction.next().next().next();
+            case 4 -> {
+                Vector2d newPosition = this.position.subtract(this.direction.toUnitVector());
+                if (this.map.canMoveTo(newPosition)) {
+                    Vector2d oldPosition = this.position;
+                    this.position = this.map.correctPosition(newPosition);
+                    System.out.print(this.cell);
+                    System.out.print(" moved from ");
+                    System.out.print(oldPosition);
+                    System.out.print(" to ");
+                    System.out.println(this.position);
+                    changePosition(oldPosition, this.position);
+                }
+            }
+            case 5 -> this.direction = this.direction.previous().previous().previous();
+            case 6 -> this.direction = this.direction.previous().previous();
+            case 7 -> this.direction = this.direction.previous();
+            default -> {
+            }
+        }
+        if (gene == 0 || gene == 4) {
+//            System.out.print(" moved ");
+//            System.out.print(this.position);
+//            System.out.println(this.direction);
         }
     }
 
@@ -85,5 +128,10 @@ public class Animal extends AbstractMapElement{
         for (IAnimalObserver observer : this.observers) {
             observer.positionChanged(this, oldPosition, newPosition);
         }
+    }
+
+    @Override
+    public String toString() {
+        return "A " + this.position.toString() + " " + this.energy + " " + this.cell.getPosition().toString();
     }
 }

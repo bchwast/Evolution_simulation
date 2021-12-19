@@ -5,9 +5,9 @@ import simulation.Vector2d;
 import simulation.element.Animal;
 import simulation.element.IMapElement;
 
-public interface IMap extends IAnimalObserver {
-    boolean place(Animal animal);
+import java.util.List;
 
+public interface IMap extends IAnimalObserver {
     Vector2d getLowerLeft();
 
     Vector2d getUpperRight();
@@ -18,11 +18,15 @@ public interface IMap extends IAnimalObserver {
 
     boolean place(IMapElement element);
 
-    void remove(IMapElement element);
+    void removeElement(IMapElement element);
 
     boolean canMoveTo(Vector2d position);
 
     Vector2d correctPosition(Vector2d position);
 
-//    boolean insertInCell(IMapElement element);
+    List<Cell> generatePlants(int plantEnergy);
+
+    boolean canPlace(Vector2d position);
+
+    boolean isJungle(Vector2d position);
 }

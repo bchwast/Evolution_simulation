@@ -17,13 +17,13 @@ public class Genotype {
     public Genotype(Animal firstParent, Animal secondParent) {
         int side = this.random.nextInt(0, 2);
         int stop;
-        int parentsEnergy = firstParent.getEnergyValue() + secondParent.getEnergyValue();
+        int parentsEnergy = firstParent.getEnergy() + secondParent.getEnergy();
         Animal strongerAnimal;
         Animal weakerAnimal;
         int[] strongerAnimalGenotype;
         int[] weakerAnimalGenotype;
 
-        if (firstParent.getEnergyValue() < secondParent.getEnergyValue()) {
+        if (firstParent.getEnergy() < secondParent.getEnergy()) {
             weakerAnimal = firstParent;
             strongerAnimal = secondParent;
         }
@@ -36,12 +36,12 @@ public class Genotype {
         weakerAnimalGenotype = weakerAnimal.getGenotype();
 
         if (side == 0) {
-            stop = (strongerAnimal.getEnergyValue() / parentsEnergy) * 32;
+            stop = (strongerAnimal.getEnergy() / parentsEnergy) * 32;
             if (stop >= 0) System.arraycopy(strongerAnimalGenotype, 0, this.genotype, 0, stop);
             if (32 - stop >= 0) System.arraycopy(weakerAnimalGenotype, stop, this.genotype, stop, 32 - stop);
         }
         else {
-            stop = (weakerAnimal.getEnergyValue() / parentsEnergy) * 32;
+            stop = (weakerAnimal.getEnergy() / parentsEnergy) * 32;
             if (stop >= 0) System.arraycopy(weakerAnimalGenotype, 0, this.genotype, 0, stop);
             if (32 - stop >= 0) System.arraycopy(strongerAnimalGenotype, stop, this.genotype, stop, 32 - stop);
         }

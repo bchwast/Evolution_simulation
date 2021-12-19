@@ -3,12 +3,10 @@ package simulation.element;
 import simulation.Vector2d;
 import simulation.map.Cell;
 
-public interface IMapElement {
+public interface IMapElement extends Comparable<IMapElement>{
     Vector2d getPosition();
 
-    Energy getEnergy();
-
-    int getEnergyValue();
+    int getEnergy();
 
     Cell getCell();
 

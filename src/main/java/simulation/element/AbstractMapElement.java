@@ -5,7 +5,7 @@ import simulation.map.Cell;
 
 public abstract class AbstractMapElement implements IMapElement {
     protected Vector2d position;
-    protected Energy energy;
+    protected int energy;
     protected Cell cell;
 
     @Override
@@ -14,13 +14,8 @@ public abstract class AbstractMapElement implements IMapElement {
     }
 
     @Override
-    public Energy getEnergy() {
+    public int getEnergy() {
         return this.energy;
-    }
-
-    @Override
-    public int getEnergyValue() {
-        return this.energy.getValue();
     }
 
     @Override
@@ -32,4 +27,10 @@ public abstract class AbstractMapElement implements IMapElement {
     public void setCell(Cell cell) {
         this.cell = cell;
     }
+
+    @Override
+    public int compareTo(IMapElement other) {
+        return Integer.compare(other.getEnergy(), this.getEnergy());
+    }
+
 }
