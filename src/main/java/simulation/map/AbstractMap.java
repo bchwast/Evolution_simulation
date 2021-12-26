@@ -24,9 +24,9 @@ public abstract class AbstractMap implements IMap{
         this.height = height;
         this.lowerLeft = new Vector2d(0, 0);
         this.upperRight = new Vector2d(width - 1, height - 1);
-        this.jungleLowerLeft = new Vector2d((int) (width * (1 - Math.sqrt(jungleRatio)) / 2), (int) (height * (1 - Math.sqrt(jungleRatio)) / 2));
-        this.jungleUpperRight = new Vector2d((int) (this.jungleLowerLeft.x + width * Math.sqrt(jungleRatio)),
-                (int) (this.jungleLowerLeft.y + height * Math.sqrt(jungleRatio)));
+        this.jungleLowerLeft = new Vector2d((int) Math.round((width * (1 - Math.sqrt(jungleRatio)) / 2)), (int) Math.round(((height) * (1 - Math.sqrt(jungleRatio)) / 2)));
+        this.jungleUpperRight = new Vector2d((int) (this.jungleLowerLeft.x + (width - 1) * Math.sqrt(jungleRatio)),
+                (int) (this.jungleLowerLeft.y + (height - 1) * Math.sqrt(jungleRatio)));
 
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
@@ -59,7 +59,7 @@ public abstract class AbstractMap implements IMap{
         return this.jungleUpperRight;
     }
 
-    private boolean insertInCell(IMapElement element) {
+    private void insertInCell(IMapElement element) {
         Vector2d position = element.getPosition();
         Cell cell = this.cells.get(position);
         if (cell == null) {
@@ -76,7 +76,6 @@ public abstract class AbstractMap implements IMap{
         }
         this.plantableJunglePositions.remove(position);
         this.plantablePositions.remove(position);
-        return true;
     }
 
     @Override

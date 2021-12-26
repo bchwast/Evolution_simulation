@@ -42,14 +42,10 @@ public class GuiElementBox {
             Rectangle jungle = new Rectangle(size, size);
             jungle.setFill(Color.rgb(2,131,1));
             vbox = new VBox(jungle);
+            vbox.setAlignment(Pos.CENTER);
+            return vbox;
         }
-        else {
-            Rectangle desert = new Rectangle(size, size);
-            desert.setFill(Color.rgb(192,108,4));
-            vbox = new VBox(desert);
-        }
-        vbox.setAlignment(Pos.CENTER);
-        return vbox;
+        return null;
     }
 
     public VBox showElement(Cell cell) {

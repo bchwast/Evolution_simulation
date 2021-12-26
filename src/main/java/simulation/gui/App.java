@@ -103,9 +103,9 @@ public class App extends Application implements IMapUpdateObserver {
         int jngRight = map.getJungleUpperRight().x;
         int jngUp = map.getJungleUpperRight().y;
 
-        for (int i = 1; i <= jngDown - jngUp + 1; i++) {
-            for (int j = 1; j <= jngRight - jngLeft + 1; j++) {
-                Vector2d position = new Vector2d(j - jngLeft + 1, jngUp - i + 1);
+        for (int i = jngDown + 1; i <= jngUp + 1; i++) {
+            for (int j = jngLeft + 1; j <= jngRight + 1; j++) {
+                Vector2d position = new Vector2d(j - 1, i - 1);
                 VBox background = this.elementCreator.showBackground(map.isJungle(position));
                 GridPane.setHalignment(background, HPos.CENTER);
                 grid.add(background, j, i, 1, 1);
@@ -120,7 +120,7 @@ public class App extends Application implements IMapUpdateObserver {
                         || (this.showGen2 && Arrays.equals(((Animal) cell.getFirstElement()).getGenotype(), this.domGen2))) {
                     Circle circle = (Circle) element.getChildren().get(0);
                     element.getChildren().clear();
-                    circle.setStroke(Color.WHITE);
+                    circle.setStroke(Color.CORNFLOWERBLUE);
                     element.getChildren().add(circle);
                 }
             }
@@ -355,12 +355,8 @@ public class App extends Application implements IMapUpdateObserver {
             this.paused2 = false;
         });
 
-        findGenotype1.setOnAction(click -> {
-            this.showGen1 = true;
-        });
-        findGenotype2.setOnAction(click -> {
-            this.showGen2 = true;
-        });
+        findGenotype1.setOnAction(click -> this.showGen1 = true);
+        findGenotype2.setOnAction(click -> this.showGen2 = true);
         stopGenotype.setOnAction(click -> {
             this.showGen1 = false;
             this.showGen2 = false;

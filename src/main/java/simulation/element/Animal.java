@@ -66,8 +66,6 @@ public class Animal extends AbstractMapElement{
     }
 
     public void die(int epoque) {
-        System.out.print(this);
-        System.out.println(" dead");
         this.cell.removeElement(this);
         this.map.removeElement(this);
         this.deathDate = epoque;
