@@ -15,14 +15,14 @@ import java.util.stream.IntStream;
 
 public class GuiElementBox {
     private final int startEnergy;
-    private final int size;
+    private final double size;
     private final List<Circle> animal;
 
-    public GuiElementBox(int size, int startEnergy) {
+    public GuiElementBox(double size, int startEnergy) {
         this.size = size;
         this.startEnergy = startEnergy;
         this.animal = new ArrayList<>();
-        IntStream.range(0, 10).forEach(i -> this.animal.add(new Circle(size / 2, size / 2, (size - 2) / 2)));
+        IntStream.range(0, 10).forEach(i -> this.animal.add(new Circle(size / 2, size / 2, (size * 0.7) / 2)));
         this.animal.get(0).setFill(Color.rgb(182,0,0));
         this.animal.get(1).setFill(Color.rgb(255,0,0));
         this.animal.get(2).setFill(Color.rgb(254,109,1));
@@ -56,20 +56,20 @@ public class GuiElementBox {
         IMapElement element = cell.getFirstElement();
         VBox vbox = null;
         if (element instanceof Plant) {
-            Rectangle plant = new Rectangle (size - 5, size - 5);
+            Rectangle plant = new Rectangle (size * 0.7, size * 0.7);
             plant.setFill(Color.rgb(0,128,255));
             vbox = new VBox(plant);
         }
         else {
             for (int i = 9; i >= 0; i--) {
                 if (element.getEnergy() > startEnergy * 0.1 * i) {
-                    Circle animalC = new Circle(size / 2, size / 2, (size - 2) / 2, this.animal.get(i).getFill());
+                    Circle animalC = new Circle(size / 2, size / 2, (size * 0.7) / 2, this.animal.get(i).getFill());
                     vbox = new VBox(animalC);
                     break;
                 }
             }
             if (vbox == null) {
-                Circle animalC = new Circle(size / 2, size / 2, (size - 2) / 2, this.animal.get(0).getFill());
+                Circle animalC = new Circle(size / 2, size / 2, (size * 0.7) / 2, this.animal.get(0).getFill());
                 vbox = new VBox(animalC);
             }
         }

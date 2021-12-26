@@ -15,7 +15,7 @@ public interface IMap extends IAnimalObserver {
 
     Vector2d getJungleUpperRight();
 
-    boolean place(IMapElement element);
+    void place(IMapElement element);
 
     void removeElement(IMapElement element);
 

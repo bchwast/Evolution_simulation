@@ -8,14 +8,12 @@ import simulation.map.IMap;
 import java.util.*;
 
 public class Animal extends AbstractMapElement{
-    private final Random random = new Random();
     private MapDirection direction = MapDirection.getRandom();
     private Genotype genotype;
     private int age = 0;
     private int deathDate = -1;
     private final IMap map;
     private final List<IAnimalObserver> observers = new ArrayList<>();
-    private Animal[] parents;
     private final Set<Animal> children = new HashSet<>();
 
     public Animal(IMap map, int energy) {
@@ -23,11 +21,12 @@ public class Animal extends AbstractMapElement{
         addObserver(map);
         this.energy = energy;
         this.genotype = new Genotype();
-        Vector2d position =  new Vector2d(this.random.nextInt(this.map.getUpperRight().x + 1),
-                this.random.nextInt(this.map.getUpperRight().y + 1));
+        Random random = new Random();
+        Vector2d position =  new Vector2d(random.nextInt(this.map.getUpperRight().x + 1),
+                random.nextInt(this.map.getUpperRight().y + 1));
         while (! this.map.canPlace(position)) {
-            position =  new Vector2d(this.random.nextInt(this.map.getUpperRight().x + 1),
-                    this.random.nextInt(this.map.getUpperRight().y + 1));
+            position =  new Vector2d(random.nextInt(this.map.getUpperRight().x + 1),
+                    random.nextInt(this.map.getUpperRight().y + 1));
         }
         this.position = position;
     }
@@ -42,10 +41,6 @@ public class Animal extends AbstractMapElement{
 
     public void addObserver(IAnimalObserver observer) {
         this.observers.add(observer);
-    }
-
-    public void removeObserver(IAnimalObserver observer) {
-        this.observers.remove(observer);
     }
 
     public int[] getGenotype() {
@@ -138,16 +133,13 @@ public class Animal extends AbstractMapElement{
 
     public int getDescendantsAmount() {
         int descendants = 0;
-        if (getChildrenAmount() == 0) {
-            return descendants;
-        }
-        else {
+        if (getChildrenAmount() != 0) {
             for (Animal child : this.children) {
                 descendants += child.getDescendantsAmount();
                 descendants++;
             }
-            return descendants;
         }
+        return descendants;
     }
 
     public IMap getMap() {

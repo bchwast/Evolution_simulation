@@ -40,7 +40,7 @@ public class CSVConverter {
                         bw.write("\"Average\",");
                     }
                     else {
-                        bw.write("\"" + Integer.toString(i + 1) + "\",");
+                        bw.write("\"" + (i + 1) + "\",");
                     }
                 }
                 else if (j == 4) {

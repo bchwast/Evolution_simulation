@@ -8,10 +8,11 @@ import simulation.element.Plant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Cell {
     private final IMap map;
-    private final List<IMapElement> elements = new ArrayList<>();
+    private final List<IMapElement> elements = new CopyOnWriteArrayList<>();
     private final Vector2d position;
     private boolean jungle = false;
 

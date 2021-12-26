@@ -10,7 +10,6 @@ public class Genotype {
 
     public Genotype() {
         IntStream.range(0, this.genotype.length).forEach(i -> this.genotype[i] = this.random.nextInt(0, 8));
-
         Arrays.sort(this.genotype);
     }
 

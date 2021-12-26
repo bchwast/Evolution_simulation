@@ -5,6 +5,7 @@ import simulation.Vector2d;
 import simulation.element.AbstractMapElement;
 import simulation.element.Animal;
 import simulation.element.IMapElement;
+import simulation.element.Plant;
 import simulation.gui.IMapUpdateObserver;
 import simulation.map.Cell;
 import simulation.map.IMap;
@@ -12,13 +13,15 @@ import simulation.map.IMap;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class SimulationEngine implements IEngine{
     private final IMap map;
-    private final List<Animal> animals = new ArrayList<>();
-    private final LinkedHashMap<Vector2d, Cell> cells = new LinkedHashMap<>();
+    private final List<Animal> animals = new CopyOnWriteArrayList<>();
+    private final ConcurrentHashMap<Vector2d, Cell> cells = new ConcurrentHashMap<>();
     private final List<IMapUpdateObserver> observers = new ArrayList<>();
-    private final List<Animal> dead = new ArrayList<>();
+    private final List<Animal> dead = new CopyOnWriteArrayList<>();
     private final int startEnergy;
     private final int moveEnergy;
     private final int plantEnergy;
@@ -26,13 +29,16 @@ public class SimulationEngine implements IEngine{
     private int epoque = 0;
     private final boolean magic;
     private int magicLeft = 3;
+    private int delay;
 
-    public SimulationEngine(IMap map, int animalsAmount, int startEnergy, int moveEnergy, int plantEnergy, boolean magic) {
+    public SimulationEngine(IMap map, int animalsAmount, int startEnergy, int moveEnergy, int plantEnergy, boolean magic,
+                            int delay) {
         this.map = map;
         this.startEnergy = startEnergy;
         this.moveEnergy = moveEnergy;
         this.plantEnergy = plantEnergy;
         this.magic = magic;
+        this.delay = delay;
 
         for (int i = 0; i < animalsAmount; i++) {
             Animal animal = new Animal(this.map, this.startEnergy);
@@ -47,8 +53,6 @@ public class SimulationEngine implements IEngine{
         while (true) {
             if (! this.paused) {
                 this.epoque++;
-                System.out.println(this.animals);
-                System.out.println(this.cells);
                 List<Animal> newDead = new ArrayList<>();
                 for (Animal animal : this.animals) {
                     if (animal.getEnergy() < this.moveEnergy) {
@@ -58,7 +62,7 @@ public class SimulationEngine implements IEngine{
                         Vector2d oldPosition = animal.getPosition();
                         animal.move();
                         animal.decreaseEnergy(this.moveEnergy);
-                        tryaddCell(animal);
+                        tryAddCell(animal);
                         tryRemoveCell(oldPosition);
                     }
                 }
@@ -86,26 +90,19 @@ public class SimulationEngine implements IEngine{
                 }
 
                 for (Cell cell : cells.values()) {
-                    System.out.println(cell.getElements());
-                    if (cell.getElementsAmount() > 1) {
-                        System.out.println("eat ");
+                    if (cell.getFirstElement() instanceof Plant && cell.getElementsAmount() > 1) {
                         cell.eat();
-                        System.out.println(cell.getElements());
                     }
                     if (cell.getElementsAmount() > 1) {
-                        System.out.println("breed");
                         Animal child = cell.tryBreeding(this.startEnergy);
                         if (child != null) {
                             this.map.place(child);
                             this.animals.add(child);
-                            System.out.println(child);
-                            System.out.println(cell.getElements());
                         }
                     } else {
                         tryRemoveCell(cell.getPosition());
                     }
                 }
-
                 growPlants();
             }
 
@@ -114,7 +111,7 @@ public class SimulationEngine implements IEngine{
             }
 
             try {
-                Thread.sleep(200);
+                Thread.sleep(this.delay);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -129,7 +126,7 @@ public class SimulationEngine implements IEngine{
         }
     };
 
-    private void tryaddCell(IMapElement element) {
+    private void tryAddCell(IMapElement element) {
         if (this.cells.get(element.getPosition()) == null) {
             this.cells.put(element.getPosition(), element.getCell());
         }
@@ -201,5 +198,15 @@ public class SimulationEngine implements IEngine{
     @Override
     public int getEpoque() {
         return this.epoque;
+    }
+
+    @Override
+    public void stop() {
+        this.animals.clear();
+    }
+
+    @Override
+    public ConcurrentHashMap<Vector2d, Cell> getCells() {
+        return this.cells;
     }
 }
