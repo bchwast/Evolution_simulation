@@ -29,7 +29,7 @@ After executing World.java, we are asked to specify starting parameters of the s
 
 Example simulation:
 <p align="center">
-  <img src="https://github.com/IgSit/animalSimulation/blob/main/media/example.gif" />
+  <img src="imgs/example.gif" />
 </p>
 
 Appearance was not the main goal, I was caring about functionality only.
