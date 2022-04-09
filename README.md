@@ -32,4 +32,4 @@ Example simulation:
   <img src="imgs/example.gif" />
 </p>
 
-Appearance was not the main goal, I was caring about functionality only.
+Appearance was not the main goal, I cared only about functionality.
